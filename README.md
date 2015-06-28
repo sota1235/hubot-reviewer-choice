@@ -1,21 +1,65 @@
-Name
+hubot reviewer choice
 ====
 
-Overview
+Hubot script for choicing code reviewer.
 
 ### Description
 
+You can choice code reviewer for some members.
+
+You can also set group of code reviewer.
+
 ### Demo
 
-### VS.
+#### choice from arguments
+
+![Image of using 'choice' from arguments]()
+
+#### choice from group
+
+![Image of using 'choice' from group]()
 
 ### Requirement
 
+- CoffeeScript
+
 ### Usage
+
+- choice from arguments
+
+```
+hubot choice a b c
+```
+
+- set code reviewer group
+
+```
+hubot choice set <groupename> <group members>
+```
+
+- delete code reviewer group
+
+```
+hubot choice delete <groupename>
+```
+
+- show set groups
+
+```
+hubot choice dump
+```
 
 ### Install
 
-### Contribution
+```shell
+% npm install hubot-reviewer-choice --save
+```
+
+#### edit `external-script.json`
+
+```json
+["hubot-reviewer-choice"]
+```
 
 ### Licence
 
