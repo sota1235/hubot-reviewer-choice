@@ -16,6 +16,9 @@
   ],
   "author": "@sota1235",
   "license": "MIT",
+  "dependencies": {
+    "lodash": "*"
+  }
   "bugs": {
     "url": "https://github.com/sota1235/hubot-reviewer-choice/issues"
   },
