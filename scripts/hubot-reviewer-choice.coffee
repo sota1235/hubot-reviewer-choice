@@ -73,7 +73,7 @@ module.exports = (robot) ->
     head  = items[0] # for judge command is choice or not
 
     # set, dump,deleteの場合、return
-    if head is 'set' or head is 'dump' or head is 'delete'
+    if head is 'set' or head is 'dump' or head is 'delete' or head is 'reset'
       return
 
     # 変数かどうか判別
