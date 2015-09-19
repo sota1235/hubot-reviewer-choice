@@ -28,6 +28,10 @@ module.exports = (robot) ->
   setData = (data) ->
     robot.brain.set CHOICE, data
 
+  # 全てのデータを削除
+  deleteData = () ->
+    setData {}
+
   # グループをセット
   setGroup = (room, groupName, groupElement) ->
     data     = getData()
@@ -122,3 +126,10 @@ module.exports = (robot) ->
       msg.send "現在登録されているグループはありません"
       return
     msg.send JSON.stringify data, null, 2
+
+  ###
+  # Reset all data
+  ###
+  robot.respond /choice reset/i, (msg) ->
+    deleteData()
+    msg.send "登録されている全データを削除しました"
