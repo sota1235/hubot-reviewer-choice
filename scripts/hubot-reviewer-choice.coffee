@@ -89,7 +89,7 @@ module.exports = (robot) ->
         elements = elements.concat [i]
 
     choice = _.sample elements
-    msg.send "厳正な抽選の結果、「#{choice}」に決まりました"
+    msg.send "厳正な抽選の結果、「@#{choice}」に決まりました"
 
   ###
   # register new group
