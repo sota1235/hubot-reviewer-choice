@@ -1,7 +1,7 @@
 {
-  "name": "hubot-reviewr-choice",
-  "version": "0.0.2",
-  "description": "Hubot script for choicing reviewer",
+  "name": "hubot-reviewer-choice",
+  "version": "1.0.0",
+  "description": "Hubot script for choosing reviewer",
   "main": "scripts/hubot-reviewer-choice.coffee",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,7 +12,8 @@
   },
   "keywords": [
     "hubot",
-    "codereview"
+    "codereview",
+    "shuffle"
   ],
   "author": "@sota1235",
   "license": "MIT",
