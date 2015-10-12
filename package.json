@@ -1,6 +1,6 @@
 {
   "name": "hubot-reviewer-choice",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Hubot script for choosing reviewer",
   "main": "scripts/hubot-reviewer-choice.coffee",
   "scripts": {
