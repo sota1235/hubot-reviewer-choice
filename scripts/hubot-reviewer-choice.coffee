@@ -1,12 +1,12 @@
-# Description
+# Description:
 #   choice one element from given arguments
 #
 # Commands:
 #   hubot choice hoge moge fuga -- choice one element from arguments at random
 #   hubot choice $<groupname> -- choice one element in <groupname> group
 #   hubot choice set <group name> <group elements> -- register new group
+#   hubot choice list -- list all group in room
 #   hubot choice delete <group name> -- delete group
-#   hubot choice dump -- show all data in 'CHOICE' table (for debugging)
 #
 # Author:
 #   @sota1235
