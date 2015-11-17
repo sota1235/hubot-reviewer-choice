@@ -21,6 +21,7 @@ ChoiceData = require path.join __dirname, '../libs/choice-data'
 module.exports = (robot) ->
 
   choiceBrain = new ChoiceData robot
+  commandList = ['set', 'dump', 'delete', 'reset', 'lists']
 
   # choice
   robot.respond /choice (.+)/i, (msg) ->
@@ -29,7 +30,7 @@ module.exports = (robot) ->
     head  = items[0] # for judge command is choice or not
 
     # return when other commands
-    if head is 'set' or head is 'dump' or head is 'delete' or head is 'reset' or head is 'lists'
+    if _.indexOf(commandList, head) >= 0
       return
 
     # judge it is groupename
