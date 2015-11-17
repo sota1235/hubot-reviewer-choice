@@ -57,5 +57,11 @@ module.exports = class Choice
     roomData = data[room] or {}
     if roomData[groupName] is undefined
       return false
-    else
-      return roomData[groupName]
+    roomData[groupName]
+
+  # get group list
+  getGroups: (room) ->
+    roomData = getData(@robot)[room] or {}
+    if (_.size roomData) is 0
+      return false
+    roomData

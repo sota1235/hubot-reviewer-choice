@@ -22,13 +22,14 @@ module.exports = (robot) ->
 
   choiceBrain = new ChoiceData robot
 
+  # choice
   robot.respond /choice (.+)/i, (msg) ->
     items = msg.match[1].split(/\s+/)
     room  = msg.message.room
     head  = items[0] # for judge command is choice or not
 
     # return when other commands
-    if head is 'set' or head is 'dump' or head is 'delete' or head is 'reset'
+    if head is 'set' or head is 'dump' or head is 'delete' or head is 'reset' or head is 'lists'
       return
 
     # judge it is groupename
@@ -49,9 +50,17 @@ module.exports = (robot) ->
     choice = _.sample elements
     msg.send "厳正な抽選の結果、「@#{choice}」に決まりました"
 
-  ###
+  # list all groups
+  robot.respond /choice list/i, (msg) ->
+    groups  = choiceBrain.getGroups(msg.message.room)
+    responds = []
+    for groupName, elements of groups
+      elms = elements.join ', '
+      responds.push "#{groupName}: #{elms}"
+    res = responds.join '\n'
+    msg.send if (_.size responds) is 0 then 'このchannelのグループは未設定です' else res
+
   # register new group
-  ###
   robot.respond /choice set (.+)/i, (msg) ->
     items = msg.match[1].split(/\s+/)
     room  = msg.message.room
@@ -64,9 +73,7 @@ module.exports = (robot) ->
     choiceBrain.setGroup room, groupName, groupElement
     msg.send "グループ：#{groupName}を設定しました"
 
-  ###
   # delete group
-  ###
   robot.respond /choice delete (.+)/i, (msg) ->
     groupName = msg.match[1].split(/\s+/)[0]
     room      = msg.message.room
@@ -75,9 +82,7 @@ module.exports = (robot) ->
     else
       msg.send "グループ：#{groupName}は存在しません。"
 
-  ###
   # for debugging
-  ###
   robot.respond /choice dump/i, (msg) ->
     data = choiceBrain.dump()
     if _.size(data) is 0
@@ -85,9 +90,7 @@ module.exports = (robot) ->
       return
     msg.send JSON.stringify data, null, 2
 
-  ###
   # reset all data
-  ###
   robot.respond /choice reset/i, (msg) ->
     choiceBrain.deleteData()
     msg.send "登録されている全データを削除しました"
