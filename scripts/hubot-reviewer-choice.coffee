@@ -14,59 +14,14 @@
 # Thanks:
 #   https://github.com/masuilab/slack-hubot/blob/master/scripts/choice.coffee
 
-_ = require 'lodash'
+path       = require 'path'
+_          = require 'lodash'
+ChoiceData = require path.join __dirname, '../libs/choice-data'
 
 module.exports = (robot) ->
-  CHOICE = 'choice_data'
 
-  # get all data
-  getData = () ->
-    data = robot.brain.get(CHOICE) or {}
-    return data
+  choiceBrain = new ChoiceData robot
 
-  # set data
-  setData = (data) ->
-    robot.brain.set CHOICE, data
-
-  # delete all data
-  deleteData = () ->
-    setData {}
-
-  # set group
-  setGroup = (room, groupName, groupElement) ->
-    data     = getData()
-    roomData = data[room] or {}
-    roomData[groupName] = groupElement
-    data[room] = roomData
-    setData data
-    return
-
-  # delete group
-  deleteGroup = (room, groupName) ->
-    data     = getData()
-    roomData = data[room] or {}
-    if roomData[groupName] is undefined
-      return false
-    delete roomData[groupName]
-    console.log _.size data[room]
-    # TODO:空っぽのroom削除
-    # なぜか動かない
-    if _.size data[room] is 0
-      delete data[room]
-    return true
-
-  # get group member
-  getGroupElem = (room, groupName) ->
-    data     = getData()
-    roomData = data[room] or {}
-    if roomData[groupName] is undefined
-      return false
-    else
-      return roomData[groupName]
-
-  ###
-  # choice one from arguments
-  ###
   robot.respond /choice (.+)/i, (msg) ->
     items = msg.match[1].split(/\s+/)
     room  = msg.message.room
@@ -80,7 +35,7 @@ module.exports = (robot) ->
     elements = []
     for i in items
       if /\$(.+)/.test i
-        element = getGroupElem room, i.substring 1
+        element = choiceBrain.getGroupElem room, i.substring 1
         if not element
           msg.send "#{i}は無効なグループ名です"
           return
@@ -97,13 +52,13 @@ module.exports = (robot) ->
   robot.respond /choice set (.+)/i, (msg) ->
     items = msg.match[1].split(/\s+/)
     room  = msg.message.room
-    groupName    = items[0]
+    groupName = items[0]
     items.shift()
     if items.length is 0
       msg.send "グループの中身が空っぽだよぉ(´・ω・｀)"
       return
     groupElement = items
-    setGroup room, groupName, groupElement
+    choiceBrain.setGroup room, groupName, groupElement
     msg.send "グループ：#{groupName}を設定しました"
 
   ###
@@ -112,7 +67,7 @@ module.exports = (robot) ->
   robot.respond /choice delete (.+)/i, (msg) ->
     groupName = msg.match[1].split(/\s+/)[0]
     room      = msg.message.room
-    if deleteGroup room, groupName
+    if choiceBrain.deleteGroup room, groupName
       msg.send "グループ：#{groupName}を削除しました。"
     else
       msg.send "グループ：#{groupName}は存在しません。"
@@ -121,7 +76,7 @@ module.exports = (robot) ->
   # for debugging
   ###
   robot.respond /choice dump/i, (msg) ->
-    data = getData()
+    data = choiceBrain.dump()
     if _.size(data) is 0
       msg.send "現在登録されているグループはありません"
       return
@@ -131,5 +86,5 @@ module.exports = (robot) ->
   # reset all data
   ###
   robot.respond /choice reset/i, (msg) ->
-    deleteData()
+    choiceBrain.deleteData()
     msg.send "登録されている全データを削除しました"
