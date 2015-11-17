@@ -37,16 +37,19 @@ hubot choice a b c
 hubot choice set <groupename> <group members>
 ```
 
+- list choice groupe
+
+```
+hubot choice list
+
+> reviewers: Sota, Yuya, Kohei
+> lunch: Pizza, Pasta, Sushi
+```
+
 - delete code reviewer group
 
 ```
 hubot choice delete <groupename>
-```
-
-- show set groups
-
-```
-hubot choice dump
 ```
 
 ### Install
