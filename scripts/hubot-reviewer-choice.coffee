@@ -26,7 +26,6 @@ module.exports = (robot) ->
   # choice
   robot.respond /choice (.+)/i, (msg) ->
     items = msg.match[1].split(/\s+/)
-    room  = msg.message.room
     head  = items[0] # for judge command is choice or not
 
     # return when other commands
@@ -37,7 +36,7 @@ module.exports = (robot) ->
     elements = []
     for i in items
       if /\$(.+)/.test i
-        element = choiceBrain.getGroupElem room, i.substring 1
+        element = choiceBrain.getGroupElem msg.message.room, i.substring 1
         if not element
           msg.send "#{i}は無効なグループ名です"
           return
