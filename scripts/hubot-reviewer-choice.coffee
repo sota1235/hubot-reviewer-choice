@@ -42,6 +42,9 @@ module.exports = (robot) ->
         elements = elements.concat element
       else
         elements = elements.concat [i]
+    # 自分を除外
+    elements = _.without elements, msg.message.user.name
+    if (_.size elements) is 0 then return
 
     choice = _.sample elements
     msg.send "厳正な抽選の結果、「@#{choice}」に決まりました"
