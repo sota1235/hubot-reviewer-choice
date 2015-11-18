@@ -46,11 +46,7 @@ module.exports = (robot) ->
     candidacies = chooser.getCandidacies msg.message.room, members, user
 
     # message
-    if (_.size candidacies) is 0
-      msg.send "有効な抽選相手がいません…そんなにレビューがしたいんです？"
-      return
-
-    msg.send "厳正な抽選の結果、「@#{chooser.choice candidacies}」に決まりました"
+    msg.send chooser.choice candidacies
 
   # list all groups
   robot.respond /choice list/i, (msg) ->

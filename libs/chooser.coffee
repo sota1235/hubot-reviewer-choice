@@ -14,8 +14,11 @@ module.exports = class Chooser
   constructor: (@choiceBrain) ->
     return
 
-  choice: (elements) ->
-    _.sample elements
+  choice: (candidacies) ->
+    if _.size(candidacies) is 0
+      "有効な抽選相手がいません…そんなにレビューがしたいんです？"
+    else
+      "厳正な抽選の結果、「@#{_.sample candidacies}」に決まりました"
 
   groupExist: (room, groupName) ->
     if not /\$(.+)/.test groupName then return
@@ -25,7 +28,7 @@ module.exports = class Chooser
       return false
     true
 
-  getCandidacies: (room, elms, user) ->
+  getCandidacies: (room, elms, user, self = false) ->
     candidacies = []
     for elm in elms
       if /\$(.+)/.test elm
@@ -33,7 +36,12 @@ module.exports = class Chooser
           candidacies.concat @choiceBrain.getGroupElm room, elm.substring 1
       else
         candidacies.push elm
-    _.without candidacies, user
+
+    # 自分を除外
+    if self
+      _.without candidacies, user
+
+    candidacies
 
   list: (room) ->
     groups = @choiceBrain.getGroups room
