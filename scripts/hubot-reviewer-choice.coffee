@@ -36,11 +36,16 @@ module.exports = (robot) ->
       return
 
     # check group name
-    for member in members
-      if /\$(.+)/.test member
-        if !chooser.groupExist room, member
-          msg.send "#{member}は無効なグループ名です"
-          return
+    invalidGroups = []
+    groups = _.filter members, (member) ->
+      return /\$(.+)/.test member
+    _.each groups, (member) ->
+      if !chooser.groupExist room, member
+        invalidGroups.push member
+
+    if _.size(invalidGroups) > 0
+      msg.send "#{invalidGroups.join ', '}は無効なグループ名です"
+      return
 
     # judge it is groupenams
     candidacies = chooser.getCandidacies msg.message.room, members, user
@@ -50,7 +55,7 @@ module.exports = (robot) ->
 
   # list all groups
   robot.respond /choice list/i, (msg) ->
-    msg.send chooser.list(msg.message.room)
+    msg.send chooser.list msg.message.room
 
   # register new group
   robot.respond /choice set (.+)/i, (msg) ->
