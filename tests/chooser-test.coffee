@@ -10,6 +10,7 @@ assert = chai.assert
 class MockClass
   getGroupElm: ->
   getGroups: ->
+  setGroup: ->
 
 describe 'unit test for chooser.coffee', ->
   describe '[choice] method test', ->
@@ -134,3 +135,23 @@ describe 'unit test for chooser.coffee', ->
       assert.equal 'a: 1, 2, 3\nb: 4, 5', chooser.list()
       mock.restore()
       done()
+
+  describe '[set] method test', ->
+    it 'when group elements is empty', (done) ->
+      chooser = new Chooser
+      assert.equal(
+        'グループの中身が空っぽだよぉ(´・ω・｀)',
+        chooser.set 'room', 'name', []
+      )
+      done()
+
+    it 'set group elements', (done) ->
+      mock = sinon.stub MockClass.prototype, 'setGroup'
+      chooser = new Chooser new MockClass
+      assert.equal(
+        'グループ：groupを設定しました',
+        chooser.set 'room', 'group', ['a', 'b']
+      )
+      mock.restore()
+      done()
+
