@@ -11,6 +11,7 @@ class MockClass
   getGroupElm: ->
   getGroups: ->
   setGroup: ->
+  deleteGroup: ->
 
 describe 'unit test for chooser.coffee', ->
   describe '[choice] method test', ->
@@ -155,3 +156,19 @@ describe 'unit test for chooser.coffee', ->
       mock.restore()
       done()
 
+  describe '[delete] method test', ->
+    it 'delete success', (done) ->
+      mock = sinon.stub MockClass.prototype, 'deleteGroup'
+        .returns true
+      chooser = new Chooser new MockClass
+      assert.equal 'グループ：groupを削除しました。', chooser.delete 'room', 'group'
+      mock.restore()
+      done()
+
+    it 'group not exist', (done) ->
+      mock = sinon.stub MockClass.prototype, 'deleteGroup'
+        .returns false
+      chooser = new Chooser new MockClass
+      assert.equal 'グループ：groupは存在しません。', chooser.delete 'room', 'group'
+      mock.restore()
+      done()
