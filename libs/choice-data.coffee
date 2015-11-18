@@ -8,7 +8,7 @@
 
 _ = require 'lodash'
 
-module.exports = class Choice
+module.exports = class ChoiceData
   CHOICE = 'CHOICE'
 
   constructor: (@robot) ->

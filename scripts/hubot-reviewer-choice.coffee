@@ -17,10 +17,12 @@
 path       = require 'path'
 _          = require 'lodash'
 ChoiceData = require path.join __dirname, '../libs/choice-data'
+Chooser    = require path.join __dirname, '../libs/chooser'
 
 module.exports = (robot) ->
 
   choiceBrain = new ChoiceData robot
+  choooser    = new Chooser choiceBrain
   commandList = ['set', 'dump', 'delete', 'reset', 'list']
 
   # choice
@@ -52,13 +54,7 @@ module.exports = (robot) ->
 
   # list all groups
   robot.respond /choice list/i, (msg) ->
-    groups  = choiceBrain.getGroups(msg.message.room)
-    responds = []
-    for groupName, elements of groups
-      elms = elements.join ', '
-      responds.push "#{groupName}: #{elms}"
-    res = responds.join '\n'
-    msg.send if (_.size responds) is 0 then 'このchannelのグループは未設定です' else res
+    msg.send choooser.list(msg.message.room)
 
   # register new group
   robot.respond /choice set (.+)/i, (msg) ->
