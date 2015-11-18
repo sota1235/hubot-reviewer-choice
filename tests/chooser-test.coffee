@@ -9,6 +9,7 @@ assert = chai.assert
 
 class MockClass
   getGroupElm: ->
+  getGroups: ->
 
 describe 'unit test for chooser.coffee', ->
   describe '[choice] method test', ->
@@ -114,3 +115,22 @@ describe 'unit test for chooser.coffee', ->
         assert.sameMembers ['a', 'b', 'c', 'd', 'e', 'f'], candidacies
         mock.restore()
         done()
+
+  describe '[list] method test', ->
+    it 'no group settings', (done) ->
+      mock = sinon.stub MockClass.prototype, 'getGroups'
+        .returns []
+      chooser = new Chooser new MockClass
+      assert.equal 'このchannelのグループは未設定です', chooser.list()
+      mock.restore()
+      done()
+
+    it 'some groups', (done) ->
+      mock = sinon.stub MockClass.prototype, 'getGroups'
+        .returns
+          a: ['1', '2', '3']
+          b: ['4', '5']
+      chooser = new Chooser new MockClass
+      assert.equal 'a: 1, 2, 3\nb: 4, 5', chooser.list()
+      mock.restore()
+      done()
