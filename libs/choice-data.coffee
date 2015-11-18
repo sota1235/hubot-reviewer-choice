@@ -52,11 +52,11 @@ module.exports = class ChoiceData
     return true
 
   # get group member
-  getGroupElem: (room, groupName) ->
+  getGroupElm: (room, groupName) ->
     data     = getData(@robot)
     roomData = data[room] or {}
     if roomData[groupName] is undefined
-      return false
+      return []
     roomData[groupName]
 
   # get group list

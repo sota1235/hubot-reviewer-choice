@@ -14,8 +14,26 @@ module.exports = class Chooser
   constructor: (@choiceBrain) ->
     return
 
-  choice = (elements) ->
-    return _.sample elements
+  choice: (elements) ->
+    _.sample elements
+
+  groupExist: (room, groupName) ->
+    if not /\$(.+)/.test groupName then return
+
+    members = @choiceBrain.getGroupElm room, groupName.substring 1
+    if _.size(members) is 0
+      return false
+    true
+
+  getCandidacies: (room, elms, user) ->
+    candidacies = []
+    for elm in elms
+      if /\$(.+)/.test elm
+        candidacies =
+          candidacies.concat @choiceBrain.getGroupElm room, elm.substring 1
+      else
+        candidacies.push elm
+    _.without candidacies, user
 
   list: (room) ->
     groups = @choiceBrain.getGroups room

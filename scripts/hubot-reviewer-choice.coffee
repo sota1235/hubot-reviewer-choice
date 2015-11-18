@@ -22,39 +22,40 @@ Chooser    = require path.join __dirname, '../libs/chooser'
 module.exports = (robot) ->
 
   choiceBrain = new ChoiceData robot
-  choooser    = new Chooser choiceBrain
+  chooser     = new Chooser choiceBrain
   commandList = ['set', 'dump', 'delete', 'reset', 'list']
 
   # choice
   robot.respond /choice (.+)/i, (msg) ->
     items = msg.match[1].split(/\s+/)
     head  = items[0] # for judge command is choice or not
+    room  = msg.message.room
+    user  = msg.message.user.name
 
     # return when other commands
     if _.indexOf(commandList, head) >= 0
       return
 
-    # judge it is groupename
-    elements = []
-    for i in items
-      if /\$(.+)/.test i
-        element = choiceBrain.getGroupElem msg.message.room, i.substring 1
-        if not element
-          msg.send "#{i}は無効なグループ名です"
+    # check group name
+    for item in items
+      if /\$(.+)/.test item
+        if !chooser.groupExist room, item
+          msg.send "#{item}は無効なグループ名です"
           return
-        elements = elements.concat element
-      else
-        elements = elements.concat [i]
-    # 自分を除外
-    elements = _.without elements, msg.message.user.name
-    if (_.size elements) is 0 then return
 
-    choice = _.sample elements
-    msg.send "厳正な抽選の結果、「@#{choice}」に決まりました"
+    # judge it is groupenams
+    candidacies = chooser.getCandidacies msg.message.room, items, user
+
+    # message
+    if (_.size candidacies) is 0
+      msg.send "有効な抽選相手がいません…そんなにレビューがしたいんです？"
+      return
+
+    msg.send "厳正な抽選の結果、「@#{chooser.choice candidacies}」に決まりました"
 
   # list all groups
   robot.respond /choice list/i, (msg) ->
-    msg.send choooser.list(msg.message.room)
+    msg.send chooser.list(msg.message.room)
 
   # register new group
   robot.respond /choice set (.+)/i, (msg) ->
