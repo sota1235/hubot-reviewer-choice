@@ -21,8 +21,6 @@ module.exports = class Chooser
       "厳正な抽選の結果、「@#{_.sample candidacies}」に決まりました"
 
   groupExist: (room, groupName) ->
-    if not /\$(.+)/.test groupName then return
-
     members = @choiceBrain.getGroupElm room, groupName.substring 1
     if _.size(members) is 0
       return false

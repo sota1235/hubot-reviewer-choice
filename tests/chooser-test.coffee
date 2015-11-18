@@ -7,6 +7,9 @@ Chooser     = require path.resolve '.', 'libs', 'chooser.coffee'
 
 assert = chai.assert
 
+class MockClass
+  getGroupElm: ->
+
 describe 'unit test for chooser.coffee', ->
   describe '[choice] method test', ->
     it 'candidacies is empty', (done) ->
@@ -29,4 +32,21 @@ describe 'unit test for chooser.coffee', ->
         chooser.choice ['a', 'b', 'c']
         /^厳正な抽選の結果、「@(a|b|c)」に決まりました$/,
       )
+      done()
+
+  describe '[groupExist] method test', ->
+    it 'group exist', (done) ->
+      mock = sinon.stub MockClass.prototype, 'getGroupElm'
+        .returns ['a']
+      chooser = new Chooser new MockClass
+      assert.isTrue chooser.groupExist 'room', '$groupName'
+      mock.restore()
+      done()
+
+    it 'group not exist', (done) ->
+      mock = sinon.stub MockClass.prototype, 'getGroupElm'
+        .returns []
+      chooser = new Chooser new MockClass
+      assert.isFalse chooser.groupExist 'room', '$groupName'
+      mock.restore()
       done()
