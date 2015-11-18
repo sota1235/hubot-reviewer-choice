@@ -52,3 +52,10 @@ module.exports = class Chooser
 
     @choiceBrain.setGroup room, name, members
     "グループ：#{name}を設定しました"
+
+  delete: (room, name) ->
+    if @choiceBrain.deleteGroup room, name
+      "グループ：#{name}を削除しました。"
+    else
+      "グループ：#{name}は存在しません。"
+

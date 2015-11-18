@@ -58,20 +58,17 @@ module.exports = (robot) ->
 
   # register new group
   robot.respond /choice set (.+)/i, (msg) ->
-    members     = msg.match[1].split(/\s+/)
-    room      = msg.message.room
-    groupName = members.shift()
+    members = msg.match[1].split(/\s+/)
+    room    = msg.message.room
+    name    = members.shift()
 
-    msg.send chooser.set room, groupName, members
+    msg.send chooser.set room, name, members
 
   # delete group
   robot.respond /choice delete (.+)/i, (msg) ->
-    groupName = msg.match[1].split(/\s+/)[0]
-    room      = msg.message.room
-    if choiceBrain.deleteGroup room, groupName
-      msg.send "グループ：#{groupName}を削除しました。"
-    else
-      msg.send "グループ：#{groupName}は存在しません。"
+    room = msg.message.room
+    name = msg.match[1].split(/\s+/)[0]
+    msg.send chooser.delete room, name
 
   # for debugging
   robot.respond /choice dump/i, (msg) ->
