@@ -15,6 +15,7 @@ module.exports = class Chooser
     return
 
   choice: (candidacies) ->
+    candidacies = _.compact candidacies
     if _.size(candidacies) is 0
       "有効な抽選相手がいません…そんなにレビューがしたいんです？"
     else

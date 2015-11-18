@@ -37,6 +37,18 @@ describe 'unit test for chooser.coffee', ->
       )
       done()
 
+    it 'empty character mixed', (done) ->
+      chooser = new Chooser
+      assert.match(
+        chooser.choice ['a', '']
+        /^厳正な抽選の結果、「@a」に決まりました$/,
+      )
+      assert.equal(
+        '有効な抽選相手がいません…そんなにレビューがしたいんです？',
+        chooser.choice ['', '', '']
+      )
+      done()
+
   describe '[groupExist] method test', ->
     it 'group exist', (done) ->
       mock = sinon.stub MockClass.prototype, 'getGroupElm'
