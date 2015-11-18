@@ -21,7 +21,7 @@ ChoiceData = require path.join __dirname, '../libs/choice-data'
 module.exports = (robot) ->
 
   choiceBrain = new ChoiceData robot
-  commandList = ['set', 'dump', 'delete', 'reset', 'lists']
+  commandList = ['set', 'dump', 'delete', 'reset', 'list']
 
   # choice
   robot.respond /choice (.+)/i, (msg) ->
