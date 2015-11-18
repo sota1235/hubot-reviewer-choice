@@ -37,7 +37,7 @@ module.exports = class Chooser
 
     # 自分を除外
     if self
-      _.without candidacies, user
+      candidacies = _.without candidacies, user
 
     candidacies
 

@@ -50,3 +50,67 @@ describe 'unit test for chooser.coffee', ->
       assert.isFalse chooser.groupExist 'room', '$groupName'
       mock.restore()
       done()
+
+  describe '[getCandidacies] method test', ->
+    describe '- normal elements', ->
+      it 'not existing own', (done) ->
+        elms = ['a', 'b', 'c']
+        chooser = new Chooser
+        candidacies = chooser.getCandidacies 'room', elms, 'user'
+        assert.isArray candidacies
+        assert.sameMembers elms, candidacies
+        done()
+
+      it 'existing own with self option false', (done) ->
+        elms = ['a', 'b', 'c']
+        chooser = new Chooser
+        candidacies = chooser.getCandidacies 'room', elms, 'a'
+        assert.sameMembers elms, candidacies
+        done()
+
+      it 'existing own with self option true', (done) ->
+        elms = ['a', 'b', 'c']
+        chooser = new Chooser
+        candidacies = chooser.getCandidacies 'room', elms, 'a', true
+        assert.sameMembers ['b', 'c'], candidacies
+        done()
+
+    describe '- contains group name', ->
+      it 'single valid group name', (done) ->
+        mock = sinon.stub MockClass.prototype, 'getGroupElm'
+          .returns ['a', 'b']
+        chooser = new Chooser new MockClass
+        candidacies = chooser.getCandidacies 'room', ['$a'], 'c'
+        assert.sameMembers ['a', 'b'], candidacies
+        mock.restore()
+        done()
+
+
+      it 'single invalid group name', (done) ->
+        mock = sinon.stub MockClass.prototype, 'getGroupElm'
+          .returns []
+        chooser = new Chooser new MockClass
+        candidacies = chooser.getCandidacies 'room', ['$a'], 'c'
+        assert.sameMembers [], candidacies
+        mock.restore()
+        done()
+
+      it 'mix groups', (done) ->
+        mock = sinon.stub MockClass.prototype, 'getGroupElm'
+        mock.withArgs('room', 'a').returns ['a', 'b']
+        mock.withArgs('room', 'b').returns ['c', 'd']
+        chooser = new Chooser new MockClass
+        candidacies = chooser.getCandidacies 'room', ['$a', '$b'], 'e'
+        assert.sameMembers ['a', 'b', 'c', 'd'], candidacies
+        mock.restore()
+        done()
+
+      it 'mix groups and normal elements', (done) ->
+        mock = sinon.stub MockClass.prototype, 'getGroupElm'
+        mock.withArgs('room', 'a').returns ['a', 'b']
+        mock.withArgs('room', 'b').returns ['c', 'd']
+        chooser = new Chooser new MockClass
+        candidacies = chooser.getCandidacies 'room', ['$a', '$b', 'e', 'f'], 'g'
+        assert.sameMembers ['a', 'b', 'c', 'd', 'e', 'f'], candidacies
+        mock.restore()
+        done()
