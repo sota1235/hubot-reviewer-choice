@@ -48,7 +48,7 @@ module.exports = (robot) ->
       return
 
     # judge it is groupenams
-    candidacies = chooser.getCandidacies msg.message.room, members, user
+    candidacies = chooser.getCandidacies msg.message.room, members, user, true
 
     # message
     msg.send chooser.choice candidacies
