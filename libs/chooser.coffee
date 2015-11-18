@@ -45,3 +45,10 @@ module.exports = class Chooser
       'このchannelのグループは未設定です'
     else
       responds.join '\n'
+
+  set: (room, name, members) ->
+    if _.size(members) is 0
+      return "グループの中身が空っぽだよぉ(´・ω・｀)"
+
+    @choiceBrain.setGroup room, name, members
+    "グループ：#{name}を設定しました"

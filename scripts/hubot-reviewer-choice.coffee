@@ -27,24 +27,23 @@ module.exports = (robot) ->
 
   # choice
   robot.respond /choice (.+)/i, (msg) ->
-    items = msg.match[1].split(/\s+/)
-    head  = items[0] # for judge command is choice or not
-    room  = msg.message.room
-    user  = msg.message.user.name
+    members = msg.match[1].split(/\s+/)
+    room    = msg.message.room
+    user    = msg.message.user.name
 
     # return when other commands
-    if _.indexOf(commandList, head) >= 0
+    if _.indexOf(commandList, members[0]) >= 0
       return
 
     # check group name
-    for item in items
-      if /\$(.+)/.test item
-        if !chooser.groupExist room, item
-          msg.send "#{item}は無効なグループ名です"
+    for member in members
+      if /\$(.+)/.test member
+        if !chooser.groupExist room, member
+          msg.send "#{member}は無効なグループ名です"
           return
 
     # judge it is groupenams
-    candidacies = chooser.getCandidacies msg.message.room, items, user
+    candidacies = chooser.getCandidacies msg.message.room, members, user
 
     # message
     if (_.size candidacies) is 0
@@ -59,16 +58,11 @@ module.exports = (robot) ->
 
   # register new group
   robot.respond /choice set (.+)/i, (msg) ->
-    items = msg.match[1].split(/\s+/)
-    room  = msg.message.room
-    groupName = items[0]
-    items.shift()
-    if items.length is 0
-      msg.send "グループの中身が空っぽだよぉ(´・ω・｀)"
-      return
-    groupElement = items
-    choiceBrain.setGroup room, groupName, groupElement
-    msg.send "グループ：#{groupName}を設定しました"
+    members     = msg.match[1].split(/\s+/)
+    room      = msg.message.room
+    groupName = members.shift()
+
+    msg.send chooser.set room, groupName, members
 
   # delete group
   robot.respond /choice delete (.+)/i, (msg) ->
