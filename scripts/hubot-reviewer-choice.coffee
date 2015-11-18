@@ -76,5 +76,4 @@ module.exports = (robot) ->
 
   # reset all data
   robot.respond /choice reset/i, (msg) ->
-    choiceBrain.deleteData()
-    msg.send "登録されている全データを削除しました"
+    msg.send chooser.reset()

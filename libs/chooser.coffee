@@ -65,3 +65,7 @@ module.exports = class Chooser
       "現在登録されているグループはありません"
     else
       JSON.stringify data, null, 2
+
+  reset: () ->
+    @choiceBrain.deleteData()
+    "登録されている全データを削除しました"
