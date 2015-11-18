@@ -72,11 +72,7 @@ module.exports = (robot) ->
 
   # for debugging
   robot.respond /choice dump/i, (msg) ->
-    data = choiceBrain.dump()
-    if _.size(data) is 0
-      msg.send "現在登録されているグループはありません"
-      return
-    msg.send JSON.stringify data, null, 2
+    msg.send chooser.dump()
 
   # reset all data
   robot.respond /choice reset/i, (msg) ->

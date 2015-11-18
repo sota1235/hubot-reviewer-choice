@@ -59,3 +59,9 @@ module.exports = class Chooser
     else
       "グループ：#{name}は存在しません。"
 
+  dump: () ->
+    data = @choiceBrain.dump()
+    if _.size(data) is 0
+      "現在登録されているグループはありません"
+    else
+      JSON.stringify data, null, 2
