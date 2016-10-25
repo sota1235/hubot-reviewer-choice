@@ -38,3 +38,10 @@ describe 'Integration test for hubot-reviewer-choice', ->
       done()
 
     adapter.receive new TextMessage user, 'hubot choice a'
+
+  it '"hubot choice self" -> not choicing', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      assert.equal strings[0], '有効な抽選相手がいません…そんなにレビューがしたいんです？'
+      done()
+
+    adapter.receive new TextMessage user, 'hubot choice mocha'
