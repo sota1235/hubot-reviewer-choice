@@ -45,3 +45,10 @@ describe 'Integration test for hubot-reviewer-choice', ->
       done()
 
     adapter.receive new TextMessage user, 'hubot choice mocha'
+
+  it '"hubot choice $group" -> group not found', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      assert.equal strings[0], '$groupは無効なグループ名です'
+      done()
+
+    adapter.receive new TextMessage user, 'hubot choice $group'
