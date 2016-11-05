@@ -41,6 +41,7 @@ describe 'Integration test for hubot-reviewer-choice', ->
 
   afterEach () ->
     robot.shutdown()
+    adapter.removeAllListeners()
     fs.writeFileSync testBrainFilePath, '', 'utf-8'
 
   it '"hubot choice a" -> a', (done) ->
@@ -63,3 +64,25 @@ describe 'Integration test for hubot-reviewer-choice', ->
       done()
 
     adapter.receive new TextMessage user, 'hubot choice $group'
+
+  it '"hubot choice $group" -> choice from group', (done) ->
+    groupName = 'sampleGroup'
+    groupMember = ['a', 'b', 'c']
+
+    counter = 0
+
+    adapter.on 'send', (envelope, strings) ->
+      # HACK 毎回リスナーに飛んで来るので何回目かで判定してassertionする
+      switch counter
+        when 0
+          assert.equal strings[0], "グループ：#{groupName}を設定しました"
+        when 1
+          assert strings[0].match /^厳正な抽選の結果、「@(a|b|c)」に決まりました$/
+      counter++
+      if counter is 2
+        done()
+
+    adapter.receive new TextMessage user, "hubot choice set #{groupName} #{groupMember.join ' '}"
+    setTimeout () ->
+      adapter.receive new TextMessage user, "hubot choice $#{groupName}"
+    , 100
