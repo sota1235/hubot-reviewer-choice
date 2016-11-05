@@ -1,3 +1,4 @@
+fs     = require 'fs'
 path   = require 'path'
 assert = require 'assert'
 
@@ -6,6 +7,7 @@ Robot         = require 'hubot/src/robot'
 FileBrain     = require 'hubot-scripts/src/scripts/file-brain'
 
 testStoragePath = path.resolve __dirname, 'storage'
+testBrainFilePath = path.resolve testStoragePath, 'brain-dump.json'
 
 process.env.FILE_BRAIN_PATH = testStoragePath
 
@@ -23,6 +25,8 @@ describe 'Integration test for hubot-reviewer-choice', ->
       robot.loadFile path.resolve '..', 'scripts', 'hubot-reviewer-choice.coffee'
 
       require('../scripts/hubot-reviewer-choice') robot
+
+      # mock hubot brain
       FileBrain robot
 
       user = robot.brain.userForId '1',
@@ -35,8 +39,9 @@ describe 'Integration test for hubot-reviewer-choice', ->
 
     robot.run()
 
-  afterEach ->
+  afterEach () ->
     robot.shutdown()
+    fs.writeFileSync testBrainFilePath, '', 'utf-8'
 
   it '"hubot choice a" -> a', (done) ->
     adapter.on 'send', (envelope, strings) ->
