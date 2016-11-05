@@ -3,6 +3,11 @@ assert = require 'assert'
 
 Robot         = require 'hubot/src/robot'
 {TextMessage} = require 'hubot/src/message'
+FileBrain     = require 'hubot-scripts/src/scripts/file-brain'
+
+testStoragePath = path.resolve __dirname, 'storage'
+
+process.env.FILE_BRAIN_PATH = testStoragePath
 
 describe 'Integration test for hubot-reviewer-choice', ->
   robot = null
@@ -18,6 +23,7 @@ describe 'Integration test for hubot-reviewer-choice', ->
       robot.loadFile path.resolve '..', 'scripts', 'hubot-reviewer-choice.coffee'
 
       require('../scripts/hubot-reviewer-choice') robot
+      FileBrain robot
 
       user = robot.brain.userForId '1',
         name: 'mocha'
