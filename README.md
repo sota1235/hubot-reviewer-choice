@@ -24,7 +24,7 @@ You can also set group of code reviewer.
 
 ### Requirement
 
-- CoffeeScript
+- Node.js v4~6
 
 ### Usage
 
