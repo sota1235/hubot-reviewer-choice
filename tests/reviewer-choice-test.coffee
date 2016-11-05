@@ -86,3 +86,18 @@ describe 'Integration test for hubot-reviewer-choice', ->
     setTimeout () ->
       adapter.receive new TextMessage user, "hubot choice $#{groupName}"
     , 100
+
+  it 'データが登録されていない時のメッセージテスト', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      assert.equal strings[0], '現在登録されているグループはありません'
+      done()
+
+    adapter.receive new TextMessage user, 'hubot choice dump'
+
+  it 'データが登録されていない時のメッセージテスト', (done) ->
+    adapter.on 'send', (envelope, strings) ->
+      assert.equal strings[0], '現在登録されているグループはありません'
+      done()
+
+    adapter.receive new TextMessage user, 'hubot choice dump'
+
